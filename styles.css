@@ -274,6 +274,59 @@ body, .intro-page {
     transform: scale(1.1) rotate(5deg);
 }
 
+/* Contact info with phone emoji and hashtags */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.phone-emoji {
+    font-size: 3rem;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+    animation: phoneGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes phoneGlow {
+    0% {
+        filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5)) brightness(1);
+    }
+    100% {
+        filter: drop-shadow(0 2px 12px rgba(212, 175, 55, 0.3)) brightness(1.1);
+    }
+}
+
+.hashtags {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.hashtag {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #d4af37;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hashtag:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: #d4af37;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+}
+
 /* Button text */
 .button-text {
     font-weight: 700;
