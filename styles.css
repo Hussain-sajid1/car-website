@@ -474,3 +474,94 @@ body, .intro-page {
         gap: 0.5rem;
     }
 } 
+
+/* Menu Overlay Styles */
+.menu-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(245, 236, 225, 0.97); /* off-white, slightly transparent */
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+}
+.menu-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  letter-spacing: 0.1em;
+  color: #a67c52; /* tan */
+}
+.menu-windows {
+  display: flex;
+  gap: 3rem;
+}
+.menu-window-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+.menu-window {
+  background: #e7cba9; /* tan */
+  border-radius: 2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 8px 32px rgba(166, 124, 82, 0.15); /* strong black + tan shadow */
+  width: 320px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.4s, color 0.4s, transform 0.25s cubic-bezier(.4,0,.2,1);
+  overflow: visible !important; /* ensure sparks are not clipped */
+}
+.menu-window:hover {
+  background: #f9f7f3; /* off-white milky */
+  box-shadow: 0 12px 40px rgba(166, 124, 82, 0.22);
+  transform: scale(1.08);
+}
+.menu-window img {
+  width: 85%;
+  height: 85%;
+  object-fit: cover;
+  border-radius: 1.5rem;
+  z-index: 2;
+  position: relative;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  background: #f9f7f3;
+  border: 2px solid #e7cba9;
+}
+.window-text {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #7c5a36; /* deep tan */
+  transition: color 0.4s cubic-bezier(.4,0,.2,1);
+  z-index: 2;
+  text-align: center;
+}
+.menu-window:hover + .window-text {
+  color: #bfa77a; /* lighter tan, matches new bg */
+}
+
+/* Spark Styles */
+.spark-container {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible !important;
+}
+.spark {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d2a86a; /* tan spark */
+  opacity: 0.85;
+  pointer-events: none;
+  will-change: transform, opacity;
+  transition: opacity 1s linear;
+} 

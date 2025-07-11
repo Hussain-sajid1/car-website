@@ -214,3 +214,81 @@ window.addEventListener('resize', () => {
 
 // Initialize scrollbar on page load
 document.addEventListener('DOMContentLoaded', updateScrollbar); 
+
+document.addEventListener('DOMContentLoaded', function() {
+    const menuButton = document.getElementById('menuButton');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const introPage = document.querySelector('.intro-page');
+    const menuWindows = document.querySelectorAll('.menu-window');
+
+    // Show menu overlay on menu button click
+    menuButton.addEventListener('click', function() {
+        menuOverlay.style.display = 'flex';
+        introPage.style.display = 'none';
+    });
+
+    // Spark animation on hover
+    menuWindows.forEach(window => {
+        window.addEventListener('mouseenter', function(e) {
+            createSparks(window);
+        });
+    });
+
+    function createSparks(windowEl) {
+        const sparkContainer = windowEl.querySelector('.spark-container');
+        sparkContainer.innerHTML = '';
+        const rect = windowEl.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+        for (let i = 0; i < 40; i++) { // reduced spark count for smoothness
+            const spark = document.createElement('div');
+            spark.className = 'spark';
+            // Randomly pick a border: 0=top, 1=right, 2=bottom, 3=left
+            const border = Math.floor(Math.random() * 4);
+            let startX, startY, dirX, dirY;
+            if (border === 0) { // top
+                startX = Math.random() * width;
+                startY = 0;
+                dirX = 0;
+                dirY = -1;
+            } else if (border === 1) { // right
+                startX = width;
+                startY = Math.random() * height;
+                dirX = 1;
+                dirY = 0;
+            } else if (border === 2) { // bottom
+                startX = Math.random() * width;
+                startY = height;
+                dirX = 0;
+                dirY = 1;
+            } else { // left
+                startX = 0;
+                startY = Math.random() * height;
+                dirX = -1;
+                dirY = 0;
+            }
+            // Animate in a small radius around the window
+            const spread = 40 + Math.random() * 40; // 40–80px
+            const endX = startX + dirX * spread + (Math.random() - 0.5) * 30;
+            const endY = startY + dirY * spread + (Math.random() - 0.5) * 30;
+            spark.style.left = startX + 'px';
+            spark.style.top = startY + 'px';
+            const duration = 1600 + Math.random() * 400; // 1.6s–2s
+            const delay = Math.random() * 0.15; // staggered start
+            spark.animate([
+                { transform: `translate(0, 0)`, opacity: 0.85 },
+                { transform: `translate(${endX - startX}px, ${endY - startY}px)`, opacity: 0 }
+            ], {
+                duration: duration,
+                easing: 'cubic-bezier(.33,1,.68,1)', // very smooth ease-out
+                fill: 'forwards',
+                delay: delay * 1000
+            });
+            sparkContainer.appendChild(spark);
+        }
+        // Remove sparks after 2s
+        setTimeout(() => {
+            sparkContainer.innerHTML = '';
+        }, 2000);
+    }
+}); 
