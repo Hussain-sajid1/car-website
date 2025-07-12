@@ -1267,6 +1267,11 @@ body, .intro-page {
         0%, 100% { transform: translateY(0); opacity: 0.7; }
         50% { transform: translateY(10px); opacity: 1; }
     }
+    
+    /* Hide back to home button on mobile */
+    .back-to-home {
+        display: none !important;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1341,6 +1346,11 @@ body, .intro-page {
     @keyframes scrollIndicator {
         0%, 100% { transform: translateY(0); opacity: 0.7; }
         50% { transform: translateY(8px); opacity: 1; }
+    }
+    
+    /* Hide back to home button on mobile */
+    .back-to-home {
+        display: none !important;
     }
 }
 
