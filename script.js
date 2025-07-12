@@ -120,50 +120,118 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Mobile touch handling
         if (isMobile) {
+            let touchStartTime = 0;
+            let isNavigating = false;
+            
             window.addEventListener('touchstart', function(e) {
+                if (isNavigating) return;
+                
+                touchStartTime = Date.now();
                 e.preventDefault();
                 e.stopPropagation();
                 
                 // Get the navigation link
-                const link = this.closest('a');
-                if (link && link.href) {
-                    // Show visual feedback
-                    this.style.background = '#f9f7f3';
-                    this.style.boxShadow = '0 12px 40px rgba(166, 124, 82, 0.22)';
-                    this.style.transform = 'scale(1.08)';
-                    
-                    // Create spark effects
-                    createSparks(this);
-                    
-                    // Navigate after spark animation completes (1.1s + buffer)
-                    setTimeout(() => {
-                        window.location.href = link.href;
-                    }, 1500);
-                }
+                const parentLink = this.closest('a');
+                if (!parentLink || !parentLink.href) return;
+                
+                const targetUrl = parentLink.href;
+                
+                // Show visual feedback
+                this.style.background = '#f9f7f3';
+                this.style.boxShadow = '0 12px 40px rgba(166, 124, 82, 0.22)';
+                this.style.transform = 'scale(1.08)';
+                
+                // Create spark effects
+                createSparks(this);
+                
+                // Prevent multiple navigations
+                isNavigating = true;
+                
+                // Navigate after spark animation completes
+                setTimeout(() => {
+                    try {
+                        console.log('Navigating to:', targetUrl);
+                        // First try: window.location.href
+                        if (window && window.location) {
+                            window.location.href = targetUrl;
+                        }
+                        // Second try: window.location.assign
+                        else if (window && window.location && window.location.assign) {
+                            window.location.assign(targetUrl);
+                        }
+                        // Final fallback: Create and click a link
+                        else {
+                            const link = document.createElement('a');
+                            link.href = targetUrl;
+                            link.click();
+                        }
+                    } catch (error) {
+                        console.log('Navigation error:', error);
+                        // Final fallback - direct link click
+                        try {
+                            const link = document.createElement('a');
+                            link.href = targetUrl;
+                            link.click();
+                        } catch (finalError) {
+                            console.log('Final navigation fallback failed:', finalError);
+                        }
+                    }
+                }, 1500);
             }, { passive: false });
             
             // Fallback click handler for mobile
             window.addEventListener('click', function(e) {
-                if (isMobile) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const link = this.closest('a');
-                    if (link && link.href) {
-                        // Show visual feedback
-                        this.style.background = '#f9f7f3';
-                        this.style.boxShadow = '0 12px 40px rgba(166, 124, 82, 0.22)';
-                        this.style.transform = 'scale(1.08)';
-                        
-                        // Create spark effects
-                        createSparks(this);
-                        
-                        // Navigate after spark animation completes
-                        setTimeout(() => {
-                            window.location.href = link.href;
-                        }, 1500);
+                if (isNavigating) return;
+                
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const parentLink = this.closest('a');
+                if (!parentLink || !parentLink.href) return;
+                
+                const targetUrl = parentLink.href;
+                
+                // Show visual feedback
+                this.style.background = '#f9f7f3';
+                this.style.boxShadow = '0 12px 40px rgba(166, 124, 82, 0.22)';
+                this.style.transform = 'scale(1.08)';
+                
+                // Create spark effects
+                createSparks(this);
+                
+                // Prevent multiple navigations
+                isNavigating = true;
+                
+                // Navigate after spark animation completes
+                setTimeout(() => {
+                    try {
+                        console.log('Navigating to:', targetUrl);
+                        // First try: window.location.href
+                        if (window && window.location) {
+                            window.location.href = targetUrl;
+                        }
+                        // Second try: window.location.assign
+                        else if (window && window.location && window.location.assign) {
+                            window.location.assign(targetUrl);
+                        }
+                        // Final fallback: Create and click a link
+                        else {
+                            const link = document.createElement('a');
+                            link.href = targetUrl;
+                            link.click();
+                        }
+                    } catch (error) {
+                        console.log('Navigation error:', error);
+                        // Final fallback - direct link click
+                        try {
+                            const link = document.createElement('a');
+                            link.href = targetUrl;
+                            link.click();
+                        } catch (finalError) {
+                            console.log('Final navigation fallback failed:', finalError);
+                        }
                     }
-                }
+                }, 1500);
             });
         }
     });
