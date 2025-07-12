@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase - HH CAR COLLECTION</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .purchase-page {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('antique back.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+
+        .purchase-container {
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 3rem;
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .car-image-container {
+            margin-bottom: 3rem;
+        }
+
+        .car-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .contact-section {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .phone-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .phone-emoji {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid #000;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phone-number {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #d4af37;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+            letter-spacing: 0.1em;
+        }
+
+        .car-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .contact-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: #f5e9c8;
+            margin-bottom: 1rem;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #d2b48c, #b8860b);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 2rem;
+            box-shadow: 0 4px 15px rgba(210, 180, 140, 0.3);
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(210, 180, 140, 0.4);
+            background: linear-gradient(135deg, #b8860b, #d2b48c);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .purchase-container {
+                padding: 2rem;
+                margin: 0 10px;
+            }
+
+            .car-title {
+                font-size: 2rem;
+            }
+
+            .phone-number {
+                font-size: 1.5rem;
+            }
+
+            .phone-emoji {
+                font-size: 2rem;
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .purchase-container {
+                padding: 1.5rem;
+            }
+
+            .car-title {
+                font-size: 1.8rem;
+            }
+
+            .contact-text {
+                font-size: 1.1rem;
+            }
+
+            .phone-number {
+                font-size: 1.3rem;
+            }
+
+            .phone-emoji {
+                font-size: 1.8rem;
+                width: 45px;
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="purchase-page">
+        <div class="purchase-container">
+            <div class="car-image-container">
+                <img id="carImage" class="car-image" src="" alt="Selected Car" />
+            </div>
+            
+            <h1 id="carTitle" class="car-title">Selected Car</h1>
+            
+            <div class="contact-section">
+                <p class="contact-text">For inquiries about this vehicle, please contact us:</p>
+                <div class="phone-container">
+                    <div class="phone-emoji">📞</div>
+                    <span class="phone-number">001001010</span>
+                </div>
+            </div>
+            
+            <a href="javascript:history.back()" class="back-button">Back to Collection</a>
+        </div>
+    </div>
+
+    <script>
+        // Get car information from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const carType = urlParams.get('car');
+        const carImage = urlParams.get('image');
+        
+        // Update page content based on car type
+        document.addEventListener('DOMContentLoaded', function() {
+            const carImageElement = document.getElementById('carImage');
+            const carTitleElement = document.getElementById('carTitle');
+            
+            if (carImage) {
+                carImageElement.src = carImage;
+            }
+            
+            if (carType) {
+                const carNames = {
+                    'rolls-royce-1930': 'Rolls Royce 1930',
+                    'mercedes-benz-300sl': 'Mercedes Benz 300 SL',
+                    'ferrari-330': 'Ferrari 330',
+                    'mustang': 'Ford Mustang',
+                    'gt': 'Ford GT',
+                    'challenger': 'Dodge Challenger'
+                };
+                
+                carTitleElement.textContent = carNames[carType] || 'Selected Car';
+            }
+        });
+    </script>
+</body>
+</html> 

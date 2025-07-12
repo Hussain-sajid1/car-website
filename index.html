@@ -9,15 +9,55 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">HH</div>
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading Luxury Collection...</div>
+        </div>
+    </div>
+    
     <div class="background-blur"></div>
     <div class="scrollbar"></div>
     
-    <main class="intro-page">
+    <!-- Navigation Header -->
+    <nav class="main-nav" id="mainNav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">HH CAR COLLECTION</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="intro-page" id="home">
         <div class="hero-section">
             <div class="hero-content">
                 <h1 class="store-title">HH CAR COLLECTION</h1>
                 
-                <div class="about-section">
+                <div class="menu-button-container">
+                    <button class="menu-button" id="menuButton">
+                        <div class="car-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
+                            </svg>
+                        </div>
+                        <span class="button-text">EXPLORE COLLECTION</span>
+                        <div class="spark-container" id="sparkContainer"></div>
+                    </button>
+                </div>
+                
+                <div class="about-section" id="about">
                     <h2>About Us</h2>
                     <p class="about-text">
                         Welcome to <span class="highlight">HH CAR COLLECTION</span>, where automotive excellence meets unparalleled luxury. 
@@ -41,53 +81,53 @@
                     </p>
                 </div>
                 
-                <div class="menu-button-container">
-                    <button class="menu-button" id="menuButton">
-                        <div class="car-icon">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>
-                            </svg>
-                        </div>
-                        <span class="button-text">MENU</span>
-                        <div class="spark-container" id="sparkContainer"></div>
-                    </button>
-                </div>
-                
-                <div class="contact-info">
+                <div class="contact-info" id="contact">
                     <div class="phone-emoji">📞</div>
                     <div class="hashtags">
                         <span class="hashtag">#HHCarCollection</span>
                         <span class="hashtag">#LuxuryCars</span>
                         <span class="hashtag">#PremiumAutomotive</span>
                     </div>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <span class="contact-icon">📧</span>
+                            <span class="contact-text">info@hhcarcollection.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">📱</span>
+                            <span class="contact-text">+1 (555) 123-4567</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">📍</span>
+                            <span class="contact-text">Luxury District, Beverly Hills, CA</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <div class="scroll-indicator">
-            <div class="scroll-arrow"></div>
-            <span>Scroll to explore</span>
-        </div>
+
     </main>
 
-    <div class="menu-overlay" id="menuOverlay" style="display: none;">
+    <div class="menu-overlay" id="menuOverlay" style="display: none; opacity: 0;">
         <div class="menu-title">MENU</div>
         <div class="menu-windows">
-            <div class="menu-window-group">
+            <a href="classic-cars.html" class="menu-window-group">
                 <div class="menu-window classic-cars" data-type="classic">
                     <div class="spark-container"></div>
                     <img src="classic.jpg" alt="Classic Car" />
                 </div>
                 <span class="window-text">Classic Cars</span>
-            </div>
-            <div class="menu-window-group">
+            </a>
+            <a href="antique-cars.html" class="menu-window-group">
                 <div class="menu-window antique-cars" data-type="antique">
                     <div class="spark-container"></div>
                     <img src="antique.jpg" alt="Antique Car" />
                 </div>
                 <span class="window-text">Antique Cars</span>
-            </div>
+            </a>
         </div>
+        <button class="back-to-home" id="backToHome">Back to Home</button>
     </div>
 
     <script src="script.js"></script>
