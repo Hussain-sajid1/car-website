@@ -756,6 +756,18 @@ body, .intro-page {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
+    /* Fix mobile viewport and navigation spacing */
+    html, body {
+        height: 100%;
+        overflow-x: hidden;
+    }
+    
+    .intro-page {
+        min-height: 100vh;
+        padding-top: 80px; /* Account for fixed navigation */
+        padding-bottom: 20px;
+    }
+    
     .nav-container {
         padding: 1rem;
     }
@@ -799,14 +811,21 @@ body, .intro-page {
     
     .hero-section {
         padding: 1rem;
+        min-height: calc(100vh - 80px); /* Full height minus nav */
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .hero-content {
         padding: 2rem 1rem;
+        width: 100%;
+        max-width: 100%;
     }
     
     .about-section {
         padding: 1.5rem;
+        margin-top: 2rem;
     }
     
     .contact-details {
@@ -828,6 +847,8 @@ body, .intro-page {
     
     .store-title {
         font-size: 2.5rem;
+        margin-top: 0;
+        padding-top: 1rem;
     }
     
     .about-section h2 {
@@ -890,28 +911,43 @@ body, .intro-page {
 }
 
 @media (max-width: 480px) {
+    /* Enhanced mobile fixes for smaller screens */
+    .intro-page {
+        padding-top: 70px; /* Slightly less padding for smaller screens */
+        padding-bottom: 15px;
+    }
+    
     .hero-section {
         padding: 0.5rem;
+        min-height: calc(100vh - 70px);
     }
     
     .hero-content {
         padding: 1.5rem 1rem;
+        width: 100%;
+        max-width: 100%;
     }
     
     .store-title {
         font-size: 2rem;
+        margin-top: 0;
+        padding-top: 0.5rem;
+        line-height: 1.2;
     }
     
     .about-section {
         padding: 1rem;
+        margin-top: 1.5rem;
     }
     
     .about-section h2 {
         font-size: 1.8rem;
+        margin-bottom: 1rem;
     }
     
     .contact-details {
         padding: 1rem;
+        margin-top: 1.5rem;
     }
     
     .contact-item {
@@ -921,15 +957,12 @@ body, .intro-page {
     .menu-button {
         padding: 1rem 1.5rem;
         font-size: 0.9rem;
+        width: 100%;
+        max-width: 280px;
     }
     
     .menu-button .button-text {
         font-size: 0.9rem;
-    }
-    
-    .menu-button {
-        width: 100%;
-        max-width: 300px;
     }
     
     .menu-button:hover {
@@ -938,6 +971,75 @@ body, .intro-page {
     
     .menu-button:active {
         transform: translateY(0) scale(1);
+    }
+    
+    /* Ensure content doesn't get cut off */
+    .contact-info {
+        margin-top: 2rem;
+        padding: 1rem;
+    }
+    
+    .phone-emoji {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .hashtags {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .hashtag {
+        font-size: 0.9rem;
+        padding: 0.3rem 0.8rem;
+    }
+    
+    /* Fix for other pages (classic-cars, antique-cars, supercars) */
+    .classic-page,
+    .antique-page,
+    .supercars-page,
+    .purchase-page {
+        min-height: 100vh;
+        padding-top: 80px;
+        padding-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .page-content {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 10px;
+        padding: 2rem 1.5rem;
+    }
+    
+    .page-title {
+        margin-top: 0;
+        padding-top: 1rem;
+        line-height: 1.2;
+    }
+    
+    .car-windows {
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .car-window {
+        width: 240px;
+        height: 150px;
+    }
+    
+    .window-text {
+        font-size: 1rem;
+    }
+    
+    .back-button {
+        margin-top: 1.5rem;
+        padding: 12px 25px;
+        font-size: 1rem;
     }
 }
 
@@ -1093,43 +1195,138 @@ body, .intro-page {
 }
 
 @media (max-width: 768px) {
+    /* Clean mobile menu layout */
+    .menu-overlay {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 80px 20px 100px 20px;
+        overflow-y: auto;
+        min-height: 100vh;
+    }
+    
     .menu-title {
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
+        font-size: 2.2rem;
+        margin-bottom: 3rem;
+        text-align: center;
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+    }
+    
+    .menu-windows {
+        flex-direction: column;
+        gap: 2.5rem;
+        width: 100%;
+        max-width: 350px;
+        margin-bottom: 3rem;
+    }
+    
+    .menu-window {
+        width: 100%;
+        max-width: 320px;
+        height: 200px;
+        margin: 0 auto;
+    }
+    
+    .menu-window img {
+        width: 85%;
+        height: 85%;
+    }
+    
+    .window-text {
+        font-size: 1.5rem;
+        margin-top: 1rem;
+    }
+    
+    .menu-window-group {
+        width: 100%;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Clean button positioning */
+    .back-to-home {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        width: 200px;
+        text-align: center;
+        margin: 2rem auto 0;
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Clean mobile menu layout for smaller screens */
+    .menu-overlay {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 60px 15px 80px 15px;
+        overflow-y: auto;
+        min-height: 100vh;
+    }
+    
+    .menu-title {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
     }
     
     .menu-windows {
         flex-direction: column;
         gap: 2rem;
+        width: 100%;
+        max-width: 300px;
+        margin-bottom: 2rem;
     }
     
     .menu-window {
-        width: 280px;
+        width: 100%;
+        max-width: 280px;
         height: 180px;
+        margin: 0 auto;
     }
     
-    .window-text {
-        font-size: 1.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .menu-title {
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-    }
-    
-    .menu-window {
-        width: 250px;
-        height: 160px;
+    .menu-window img {
+        width: 80%;
+        height: 80%;
     }
     
     .window-text {
         font-size: 1.3rem;
+        margin-top: 0.8rem;
     }
     
-    .menu-windows {
-        gap: 1.5rem;
+    .menu-window-group {
+        width: 100%;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Clean button positioning */
+    .back-to-home {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        width: 180px;
+        text-align: center;
+        margin: 1.5rem auto 0;
+        padding: 10px 20px;
+        font-size: 0.9rem;
     }
 }
 
