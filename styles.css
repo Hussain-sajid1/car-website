@@ -40,13 +40,96 @@
 }
 
 .loading-spinner {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    margin: 0 auto 2rem;
+    animation: luxuryPulse 2s ease-in-out infinite;
+}
+
+/* Luxury Diamond Ring */
+.diamond-ring {
     width: 60px;
     height: 60px;
-    border: 3px solid rgba(212, 175, 55, 0.3);
-    border-top: 3px solid #d4af37;
+    border: 3px solid #d4af37;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 2rem;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: transparent;
+    animation: ringRotate 3s linear infinite;
+}
+
+.diamond-ring::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(212, 175, 55, 0.6);
+    border-radius: 50%;
+    top: 8px;
+    left: 8px;
+    animation: ringPulse 2s ease-in-out infinite;
+}
+
+.diamond-ring::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 50%;
+    top: 18px;
+    left: 18px;
+    animation: ringGlow 1.5s ease-in-out infinite;
+}
+
+/* Luxury Diamond */
+.diamond {
+    width: 12px;
+    height: 12px;
+    background: linear-gradient(45deg, #d4af37, #fff, #d4af37);
+    border-radius: 2px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    animation: diamondSparkle 1s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
+}
+
+/* Luxury Particles */
+.luxury-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #d4af37;
+    border-radius: 50%;
+    animation: particleFloat 2s ease-in-out infinite;
+}
+
+.luxury-particle:nth-child(1) {
+    top: 0;
+    left: 50%;
+    animation-delay: 0s;
+}
+
+.luxury-particle:nth-child(2) {
+    top: 50%;
+    right: 0;
+    animation-delay: 0.5s;
+}
+
+.luxury-particle:nth-child(3) {
+    bottom: 0;
+    left: 50%;
+    animation-delay: 1s;
+}
+
+.luxury-particle:nth-child(4) {
+    top: 50%;
+    left: 0;
+    animation-delay: 1.5s;
 }
 
 .loading-text {
@@ -61,9 +144,34 @@
     50% { transform: scale(1.1); opacity: 0.8; }
 }
 
-@keyframes spin {
+@keyframes luxuryPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes ringRotate {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+@keyframes ringPulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+@keyframes ringGlow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+}
+
+@keyframes diamondSparkle {
+    0%, 100% { transform: translate(-50%, -50%) rotate(45deg) scale(1); }
+    50% { transform: translate(-50%, -50%) rotate(45deg) scale(1.2); }
+}
+
+@keyframes particleFloat {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+    50% { transform: translateY(-10px) scale(1.2); opacity: 1; }
 }
 
 @keyframes textFade {
