@@ -104,6 +104,28 @@
             color: #f0f0f0;
             text-shadow: 0 2px 8px rgba(0,0,0,0.8);
             transition: color 0.4s ease;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #d4af37;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(184, 134, 11, 0.2));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .car-window:hover + .window-text + .price-tag {
+            color: #f5e9c8;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(184, 134, 11, 0.3));
+            border-color: rgba(212, 175, 55, 0.5);
+            transform: scale(1.05);
         }
 
         .car-window:hover + .window-text {
@@ -221,6 +243,11 @@
                 font-size: 1rem;
             }
 
+            .price-tag {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.8rem;
+            }
+
             .back-button {
                 padding: 12px 25px;
                 font-size: 1rem;
@@ -259,6 +286,11 @@
 
             .window-text {
                 font-size: 0.9rem;
+            }
+
+            .price-tag {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.6rem;
             }
         }
 
@@ -366,6 +398,40 @@
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
 
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            border: none;
+            padding: 12px 24px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(135deg, #b8860b, #d4af37);
+        }
+
+        .add-to-cart-btn:active {
+            transform: translateY(0);
+        }
+
+        .add-to-cart-btn.added {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            pointer-events: none;
+        }
+
+        .add-to-cart-btn.added::after {
+            content: ' ✓ ADDED';
+        }
+
         @media (max-width: 768px) {
             .modal-content {
                 margin: 20% auto;
@@ -390,6 +456,44 @@
             .availability-box p {
                 font-size: 1rem;
             }
+            
+            .close-modal {
+                font-size: 1.8rem;
+                width: 35px;
+                height: 35px;
+                cursor: pointer;
+                z-index: 10;
+                position: relative;
+            }
+            
+            .close-modal:active {
+                transform: scale(0.9);
+                background: rgba(212, 175, 55, 0.3);
+            }
+            
+            .contact-link {
+                padding: 8px 12px;
+                display: inline-block;
+                border-radius: 6px;
+                background: rgba(212, 175, 55, 0.1);
+                border: 1px solid rgba(212, 175, 55, 0.3);
+                transition: all 0.3s ease;
+            }
+            
+            .contact-link:active {
+                background: rgba(212, 175, 55, 0.2);
+                transform: scale(0.95);
+            }
+            
+            .add-to-cart-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                margin-top: 0.8rem;
+            }
+            
+            .add-to-cart-btn:active {
+                transform: scale(0.95);
+            }
         }
     </style>
 </head>
@@ -405,6 +509,7 @@
                         <img src="images/rollsb.jpg" alt="Rolls x Bugatti" />
                     </div>
                     <span class="window-text">Rolls x Bugatti</span>
+                    <div class="price-tag">$500,000</div>
                 </div>
                 <div class="car-window-group">
                     <div class="car-window" data-car="lamborghini" data-image="images/lambur.jpg">
@@ -412,6 +517,7 @@
                         <img src="images/lambur.jpg" alt="Lamborghini" />
                     </div>
                     <span class="window-text">Lamborghini</span>
+                    <div class="price-tag">$500,000</div>
                 </div>
                 <div class="car-window-group">
                     <div class="car-window" data-car="ferrari" data-image="images/f90.jpg">
@@ -419,6 +525,7 @@
                         <img src="images/f90.jpg" alt="Ferrari SF90" />
                     </div>
                     <span class="window-text">Ferrari SF90</span>
+                    <div class="price-tag">$500,000</div>
                 </div>
             </div>
             
@@ -434,8 +541,9 @@
             </div>
             <div class="modal-body">
                 <div class="availability-box">
-                    <h3>AVAILABLE</h3>
-                    <p>FOR PRICE: <span class="contact-link" id="contactLink">CONTACT US</span></p>
+                    <h3>FOR AVAILABILITY</h3>
+                    <p><span class="contact-link" id="contactLink">CONTACT US</span></p>
+                    <button class="add-to-cart-btn" id="addToCartBtn">ADD TO CART</button>
                 </div>
             </div>
         </div>
@@ -486,8 +594,57 @@
             const carModal = document.getElementById('carModal');
             const closeModal = document.getElementById('closeModal');
             const contactLink = document.getElementById('contactLink');
+            const addToCartBtn = document.getElementById('addToCartBtn');
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
             let activeCarWindow = null;
+            
+            // Cart functionality
+            class Cart {
+                constructor() {
+                    this.items = JSON.parse(localStorage.getItem('cart')) || [];
+                    this.updateCartCount();
+                }
+
+                addItem(carType, carName, carImage, category) {
+                    const existingItem = this.items.find(item => item.carType === carType);
+                    
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        this.items.push({
+                            carType,
+                            carName,
+                            carImage,
+                            category,
+                            quantity: 1
+                        });
+                    }
+                    
+                    this.saveCart();
+                    this.updateCartCount();
+                }
+
+                getTotalItems() {
+                    return this.items.reduce((total, item) => total + item.quantity, 0);
+                }
+
+                saveCart() {
+                    localStorage.setItem('cart', JSON.stringify(this.items));
+                }
+
+                updateCartCount() {
+                    const cartCount = document.getElementById('cartCount');
+                    if (cartCount) {
+                        cartCount.textContent = this.getTotalItems();
+                        if (this.getTotalItems() > 0) {
+                            cartCount.classList.add('animate');
+                            setTimeout(() => cartCount.classList.remove('animate'), 600);
+                        }
+                    }
+                }
+            }
+
+            const cart = new Cart();
             
             carWindows.forEach(window => {
                 // Track if window is in active state
@@ -504,7 +661,7 @@
                         showCarModal(carType, carImage);
                     });
                 } else {
-                    // Mobile: Simple direct navigation with effects
+                    // Mobile: Show modal first, then navigate on contact link click
                     window.addEventListener('touchstart', function(e) {
                         e.preventDefault();
                         e.stopPropagation();
@@ -524,11 +681,8 @@
                         // Create spark effects
                         createSparks(this);
                         
-                        // Navigate after 2 seconds
-                        setTimeout(() => {
-                            console.log('Navigating to purchase page:', carType, carImage);
-                            window.location.href = `purchase.html?car=${carType}&image=${carImage}`;
-                        }, 2000);
+                        // Show modal instead of direct navigation
+                        showCarModal(carType, carImage);
                     }, { passive: false });
                     
                     // Fallback click handler
@@ -552,11 +706,8 @@
                             // Create spark effects
                             createSparks(this);
                             
-                            // Navigate after 2 seconds
-                            setTimeout(() => {
-                                console.log('Click - Navigating to purchase page:', carType, carImage);
-                                window.location.href = `purchase.html?car=${carType}&image=${carImage}`;
-                            }, 2000);
+                            // Show modal instead of direct navigation
+                            showCarModal(carType, carImage);
                         }
                     });
                 }
@@ -613,31 +764,43 @@
             }
             
             // Close modal when clicking close button
-            if (isMobile) {
-                closeModal.addEventListener('touchstart', function(e) {
+            function closeModalHandler(e) {
+                if (e) {
                     e.preventDefault();
-                    carModal.style.display = 'none';
-                }, { passive: false });
+                    e.stopPropagation();
+                }
+                carModal.style.display = 'none';
+            }
+            
+            if (isMobile) {
+                // Multiple event listeners for better mobile compatibility
+                closeModal.addEventListener('touchstart', closeModalHandler, { passive: false });
+                closeModal.addEventListener('touchend', closeModalHandler, { passive: false });
+                closeModal.addEventListener('click', closeModalHandler);
+                
+                // Additional touch event for better reliability
+                closeModal.addEventListener('touchcancel', closeModalHandler, { passive: false });
             } else {
-                closeModal.addEventListener('click', function() {
-                    carModal.style.display = 'none';
-                });
+                closeModal.addEventListener('click', closeModalHandler);
             }
             
             // Close modal when clicking outside
-            if (isMobile) {
-                carModal.addEventListener('touchstart', function(e) {
-                    if (e.target === carModal) {
+            function closeModalOutsideHandler(e) {
+                if (e.target === carModal) {
+                    if (e) {
                         e.preventDefault();
-                        carModal.style.display = 'none';
+                        e.stopPropagation();
                     }
-                }, { passive: false });
+                    carModal.style.display = 'none';
+                }
+            }
+            
+            if (isMobile) {
+                carModal.addEventListener('touchstart', closeModalOutsideHandler, { passive: false });
+                carModal.addEventListener('touchend', closeModalOutsideHandler, { passive: false });
+                carModal.addEventListener('click', closeModalOutsideHandler);
             } else {
-                carModal.addEventListener('click', function(e) {
-                    if (e.target === carModal) {
-                        carModal.style.display = 'none';
-                    }
-                });
+                carModal.addEventListener('click', closeModalOutsideHandler);
             }
             
             // Contact link functionality
@@ -648,6 +811,14 @@
                     const carImage = this.getAttribute('data-car-image');
                     window.location.href = `purchase.html?car=${carType}&image=${carImage}`;
                 }, { passive: false });
+                
+                // Fallback click handler for mobile
+                contactLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const carType = this.getAttribute('data-car-type');
+                    const carImage = this.getAttribute('data-car-image');
+                    window.location.href = `purchase.html?car=${carType}&image=${carImage}`;
+                });
             } else {
                 contactLink.addEventListener('click', function() {
                     const carType = this.getAttribute('data-car-type');
@@ -656,9 +827,55 @@
                 });
             }
             
+            // Add to cart functionality
+            if (isMobile) {
+                addToCartBtn.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    addToCart(this);
+                }, { passive: false });
+                
+                addToCartBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    addToCart(this);
+                });
+            } else {
+                addToCartBtn.addEventListener('click', function() {
+                    addToCart(this);
+                });
+            }
+            
+            function addToCart(button) {
+                const carType = button.getAttribute('data-car-type');
+                const carName = button.getAttribute('data-car-name');
+                const carImage = button.getAttribute('data-car-image');
+                const category = 'Super Cars';
+                
+                cart.addItem(carType, carName, carImage, category);
+                
+                // Update button state
+                button.textContent = 'ADDED TO CART';
+                button.classList.add('added');
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    button.textContent = 'ADD TO CART';
+                    button.classList.remove('added');
+                }, 2000);
+            }
+            
             function showCarModal(carType, carImage) {
                 contactLink.setAttribute('data-car-type', carType);
                 contactLink.setAttribute('data-car-image', carImage);
+                
+                // Set car data for add to cart button
+                addToCartBtn.setAttribute('data-car-type', carType);
+                addToCartBtn.setAttribute('data-car-image', carImage);
+                
+                // Get car name from the window text
+                const carWindow = document.querySelector(`[data-car="${carType}"]`);
+                const carName = carWindow ? carWindow.closest('.car-window-group').querySelector('.window-text').textContent : carType;
+                addToCartBtn.setAttribute('data-car-name', carName);
+                
                 carModal.style.display = 'block';
             }
 

@@ -104,6 +104,28 @@
             color: #f0f0f0;
             text-shadow: 0 2px 8px rgba(0,0,0,0.8);
             transition: color 0.4s ease;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #d4af37;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(184, 134, 11, 0.2));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .car-window:hover + .window-text + .price-tag {
+            color: #f5e9c8;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(184, 134, 11, 0.3));
+            border-color: rgba(212, 175, 55, 0.5);
+            transform: scale(1.05);
         }
 
         .car-window:hover + .window-text {
@@ -189,6 +211,11 @@
                 font-size: 1rem;
             }
 
+            .price-tag {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.8rem;
+            }
+
             .back-button {
                 padding: 12px 25px;
                 font-size: 1rem;
@@ -215,6 +242,11 @@
 
             .window-text {
                 font-size: 0.9rem;
+            }
+
+            .price-tag {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.6rem;
             }
         }
 
@@ -322,6 +354,40 @@
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
 
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            border: none;
+            padding: 12px 24px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            background: linear-gradient(135deg, #b8860b, #d4af37);
+        }
+
+        .add-to-cart-btn:active {
+            transform: translateY(0);
+        }
+
+        .add-to-cart-btn.added {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            pointer-events: none;
+        }
+
+        .add-to-cart-btn.added::after {
+            content: ' ✓ ADDED';
+        }
+
         @media (max-width: 768px) {
             .modal-content {
                 margin: 20% auto;
@@ -346,6 +412,16 @@
             .availability-box p {
                 font-size: 1rem;
             }
+            
+            .add-to-cart-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                margin-top: 0.8rem;
+            }
+            
+            .add-to-cart-btn:active {
+                transform: scale(0.95);
+            }
         }
     </style>
 </head>
@@ -361,6 +437,7 @@
                         <img src="images/antique.jpg" alt="Rolls Royce 1930" />
                     </div>
                     <span class="window-text">Rolls Royce 1930</span>
+                    <div class="price-tag">$500,000</div>
                 </div>
                 <div class="car-window-group">
                     <div class="car-window" data-car="mercedes-benz-300sl" data-image="images/merc.jpg">
@@ -368,6 +445,7 @@
                         <img src="images/merc.jpg" alt="Mercedes Benz 300 SL" />
                     </div>
                     <span class="window-text">Mercedes Benz 300 SL</span>
+                    <div class="price-tag">$500,000</div>
                 </div>
                 <div class="car-window-group">
                     <div class="car-window" data-car="ferrari-330" data-image="images/330.jpg">
@@ -375,6 +453,7 @@
                         <img src="images/330.jpg" alt="Ferrari 330" />
                     </div>
                     <span class="window-text">Ferrari 330</span>
+                    <div class="price-tag">$500,000</div>
                 </div>
             </div>
             
@@ -390,8 +469,9 @@
             </div>
             <div class="modal-body">
                 <div class="availability-box">
-                    <h3>AVAILABLE</h3>
-                    <p>FOR PRICE: <span class="contact-link" id="contactLink">CONTACT US</span></p>
+                    <h3>FOR AVAILABILITY</h3>
+                    <p><span class="contact-link" id="contactLink">CONTACT US</span></p>
+                    <button class="add-to-cart-btn" id="addToCartBtn">ADD TO CART</button>
                 </div>
             </div>
         </div>
@@ -442,6 +522,55 @@
             const carModal = document.getElementById('carModal');
             const closeModal = document.getElementById('closeModal');
             const contactLink = document.getElementById('contactLink');
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            
+            // Cart functionality
+            class Cart {
+                constructor() {
+                    this.items = JSON.parse(localStorage.getItem('cart')) || [];
+                    this.updateCartCount();
+                }
+
+                addItem(carType, carName, carImage, category) {
+                    const existingItem = this.items.find(item => item.carType === carType);
+                    
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        this.items.push({
+                            carType,
+                            carName,
+                            carImage,
+                            category,
+                            quantity: 1
+                        });
+                    }
+                    
+                    this.saveCart();
+                    this.updateCartCount();
+                }
+
+                getTotalItems() {
+                    return this.items.reduce((total, item) => total + item.quantity, 0);
+                }
+
+                saveCart() {
+                    localStorage.setItem('cart', JSON.stringify(this.items));
+                }
+
+                updateCartCount() {
+                    const cartCount = document.getElementById('cartCount');
+                    if (cartCount) {
+                        cartCount.textContent = this.getTotalItems();
+                        if (this.getTotalItems() > 0) {
+                            cartCount.classList.add('animate');
+                            setTimeout(() => cartCount.classList.remove('animate'), 600);
+                        }
+                    }
+                }
+            }
+
+            const cart = new Cart();
             
             carWindows.forEach(window => {
                 window.addEventListener('mouseenter', function(e) {
@@ -474,9 +603,39 @@
                 window.location.href = `purchase.html?car=${carType}&image=${carImage}`;
             });
             
+            // Add to cart functionality
+            addToCartBtn.addEventListener('click', function() {
+                const carType = this.getAttribute('data-car-type');
+                const carName = this.getAttribute('data-car-name');
+                const carImage = this.getAttribute('data-car-image');
+                const category = 'Antique Cars';
+                
+                cart.addItem(carType, carName, carImage, category);
+                
+                // Update button state
+                this.textContent = 'ADDED TO CART';
+                this.classList.add('added');
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    this.textContent = 'ADD TO CART';
+                    this.classList.remove('added');
+                }, 2000);
+            });
+            
             function showCarModal(carType, carImage) {
                 contactLink.setAttribute('data-car-type', carType);
                 contactLink.setAttribute('data-car-image', carImage);
+                
+                // Set car data for add to cart button
+                addToCartBtn.setAttribute('data-car-type', carType);
+                addToCartBtn.setAttribute('data-car-image', carImage);
+                
+                // Get car name from the window text
+                const carWindow = document.querySelector(`[data-car="${carType}"]`);
+                const carName = carWindow ? carWindow.closest('.car-window-group').querySelector('.window-text').textContent : carType;
+                addToCartBtn.setAttribute('data-car-name', carName);
+                
                 carModal.style.display = 'block';
             }
 

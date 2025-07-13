@@ -1,3 +1,52 @@
+// Cart functionality
+class Cart {
+    constructor() {
+        this.items = JSON.parse(localStorage.getItem('cart')) || [];
+        this.updateCartCount();
+    }
+
+    addItem(carType, carName, carImage, category) {
+        const existingItem = this.items.find(item => item.carType === carType);
+        
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            this.items.push({
+                carType,
+                carName,
+                carImage,
+                category,
+                quantity: 1
+            });
+        }
+        
+        this.saveCart();
+        this.updateCartCount();
+    }
+
+    getTotalItems() {
+        return this.items.reduce((total, item) => total + item.quantity, 0);
+    }
+
+    saveCart() {
+        localStorage.setItem('cart', JSON.stringify(this.items));
+    }
+
+    updateCartCount() {
+        const cartCount = document.getElementById('cartCount');
+        if (cartCount) {
+            cartCount.textContent = this.getTotalItems();
+            if (this.getTotalItems() > 0) {
+                cartCount.classList.add('animate');
+                setTimeout(() => cartCount.classList.remove('animate'), 600);
+            }
+        }
+    }
+}
+
+// Initialize cart
+const cart = new Cart();
+
 // Simple website functionality
 document.addEventListener('DOMContentLoaded', function() {
     // Loading screen
@@ -19,6 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
         navToggle.addEventListener('click', () => {
             navToggle.classList.toggle('active');
             navMenu.classList.toggle('active');
+        });
+    }
+
+    // Cart button functionality
+    const cartButton = document.getElementById('cartButton');
+    if (cartButton) {
+        cartButton.addEventListener('click', () => {
+            window.location.href = 'cart.html';
         });
     }
 
