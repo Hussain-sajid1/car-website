@@ -170,12 +170,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // Close menu overlay when clicking outside with mobile optimization
     if (menuOverlay) {
         if (isMobile) {
+            // For mobile, only allow closing via back button, not by touching outside
+            // This prevents accidental closures while allowing scrolling
+            let touchStartTime = 0;
+            let isScrolling = false;
+            
             menuOverlay.addEventListener('touchstart', (e) => {
-                if (e.target === menuOverlay) {
-                    menuOverlay.style.opacity = '0';
-                    setTimeout(() => {
-                        menuOverlay.style.display = 'none';
-                    }, 300);
+                touchStartTime = Date.now();
+                isScrolling = false;
+            }, { passive: true });
+            
+            menuOverlay.addEventListener('touchmove', (e) => {
+                isScrolling = true;
+            }, { passive: true });
+            
+            menuOverlay.addEventListener('touchend', (e) => {
+                const touchDuration = Date.now() - touchStartTime;
+                
+                // Only close if it's a quick tap (not a scroll) and touching the background
+                if (touchDuration < 200 && !isScrolling && e.target === menuOverlay) {
+                    // Don't close - let user scroll instead
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
             });
         } else {
@@ -258,6 +274,8 @@ document.addEventListener('DOMContentLoaded', function() {
             let touchStartTime = 0;
             let isNavigating = false;
             let touchTimeout = null;
+            let touchStartY = 0;
+            let touchStartX = 0;
             
             // Target only the image for mobile clicks
             const menuImage = window.querySelector('img');
@@ -268,7 +286,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (isNavigating) return;
                 
                 touchStartTime = Date.now();
-                e.preventDefault();
+                touchStartY = e.touches[0].clientY;
+                touchStartX = e.touches[0].clientX;
+                
+                // Don't prevent default immediately - check if it's a scroll gesture
                 e.stopPropagation();
                 
                 // Get the navigation link
@@ -308,8 +329,32 @@ document.addEventListener('DOMContentLoaded', function() {
                             console.log('Final navigation fallback failed:', finalError);
                         }
                     }
-                }, 800);
-            }, { passive: false });
+                }, 600);
+            }, { passive: true });
+            
+            // Handle touch move to detect scroll gestures
+            menuImage.addEventListener('touchmove', function(e) {
+                if (!isNavigating) return;
+                
+                const touchY = e.touches[0].clientY;
+                const touchX = e.touches[0].clientX;
+                const deltaY = Math.abs(touchY - touchStartY);
+                const deltaX = Math.abs(touchX - touchStartX);
+                
+                // If it's a scroll gesture (vertical movement > horizontal), cancel navigation
+                if (deltaY > deltaX && deltaY > 10) {
+                    isNavigating = false;
+                    if (touchTimeout) {
+                        clearTimeout(touchTimeout);
+                    }
+                    
+                    // Reset visual feedback
+                    const windowEl = this.closest('.menu-window');
+                    windowEl.style.background = '';
+                    windowEl.style.boxShadow = '';
+                    windowEl.style.transform = '';
+                }
+            }, { passive: true });
             
             // Fallback click handler for mobile
             menuImage.addEventListener('click', function(e) {
@@ -346,7 +391,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             console.log('Final navigation fallback failed:', finalError);
                         }
                     }
-                }, 800);
+                }, 600);
             });
         }
     });
