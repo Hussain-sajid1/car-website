@@ -47,76 +47,152 @@ class Cart {
 // Initialize cart
 const cart = new Cart();
 
+// Mobile detection and performance optimizations
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
+// Mobile performance optimizations
+if (isMobile) {
+    // Optimize touch scrolling
+    document.body.style.webkitOverflowScrolling = 'touch';
+    
+    // Reduce motion for users who prefer it
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.style.setProperty('--animation-duration', '0.1s');
+        document.documentElement.style.setProperty('--transition-duration', '0.1s');
+    }
+}
+
 // Simple website functionality
 document.addEventListener('DOMContentLoaded', function() {
     // Loading screen
     const loadingScreen = document.getElementById('loadingScreen');
     if (loadingScreen) {
+        // Reduce loading time on mobile for better UX
+        const loadingTime = isMobile ? 1000 : 2000;
         setTimeout(() => {
             loadingScreen.classList.add('hidden');
             setTimeout(() => {
                 loadingScreen.style.display = 'none';
             }, 800);
-        }, 2000);
+        }, loadingTime);
     }
 
-    // Navigation toggle
+    // Navigation toggle with improved mobile handling
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.querySelector('.nav-menu');
     
     if (navToggle && navMenu) {
-        navToggle.addEventListener('click', () => {
-            navToggle.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
+        // Handle both mobile and desktop properly
+        if (isMobile) {
+            navToggle.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navToggle.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+            
+            // Close menu when clicking outside on mobile
+            document.addEventListener('touchstart', (e) => {
+                if (navMenu.classList.contains('active') && 
+                    !navMenu.contains(e.target) && 
+                    !navToggle.contains(e.target)) {
+                    navToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            });
+        } else {
+            // Desktop click handling
+            navToggle.addEventListener('click', () => {
+                navToggle.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
     }
 
-    // Cart button functionality
+    // Cart button functionality with mobile optimization
     const cartButton = document.getElementById('cartButton');
     if (cartButton) {
-        cartButton.addEventListener('click', () => {
-            window.location.href = 'cart.html';
-        });
+        if (isMobile) {
+            cartButton.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                window.location.href = 'cart.html';
+            });
+        } else {
+            cartButton.addEventListener('click', () => {
+                window.location.href = 'cart.html';
+            });
+        }
     }
 
-    // Menu overlay functionality
+    // Menu overlay functionality with mobile optimizations
     const menuButton = document.getElementById('menuButton');
     const menuOverlay = document.getElementById('menuOverlay');
     const backToHome = document.getElementById('backToHome');
 
     if (menuButton && menuOverlay) {
-        menuButton.addEventListener('click', () => {
-            menuOverlay.style.display = 'flex';
-            setTimeout(() => {
-                menuOverlay.style.opacity = '1';
-            }, 10);
-        });
+        if (isMobile) {
+            menuButton.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                menuOverlay.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    menuOverlay.style.opacity = '1';
+                });
+            });
+        } else {
+            menuButton.addEventListener('click', () => {
+                menuOverlay.style.display = 'flex';
+                setTimeout(() => {
+                    menuOverlay.style.opacity = '1';
+                }, 10);
+            });
+        }
     }
 
     if (backToHome && menuOverlay) {
-        backToHome.addEventListener('click', () => {
-            menuOverlay.style.opacity = '0';
-            setTimeout(() => {
-                menuOverlay.style.display = 'none';
-            }, 300);
-        });
-    }
-
-    // Close menu overlay when clicking outside
-    if (menuOverlay) {
-        menuOverlay.addEventListener('click', (e) => {
-            if (e.target === menuOverlay) {
+        if (isMobile) {
+            backToHome.addEventListener('touchstart', (e) => {
+                e.preventDefault();
                 menuOverlay.style.opacity = '0';
                 setTimeout(() => {
                     menuOverlay.style.display = 'none';
                 }, 300);
-            }
-        });
+            });
+        } else {
+            backToHome.addEventListener('click', () => {
+                menuOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    menuOverlay.style.display = 'none';
+                }, 300);
+            });
+        }
     }
 
-    // Spark effect for menu button
+    // Close menu overlay when clicking outside with mobile optimization
+    if (menuOverlay) {
+        if (isMobile) {
+            menuOverlay.addEventListener('touchstart', (e) => {
+                if (e.target === menuOverlay) {
+                    menuOverlay.style.opacity = '0';
+                    setTimeout(() => {
+                        menuOverlay.style.display = 'none';
+                    }, 300);
+                }
+            });
+        } else {
+            menuOverlay.addEventListener('click', (e) => {
+                if (e.target === menuOverlay) {
+                    menuOverlay.style.opacity = '0';
+                    setTimeout(() => {
+                        menuOverlay.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+    }
+
+    // Spark effect for menu button (disabled on mobile for performance)
     const sparkContainer = document.getElementById('sparkContainer');
-    if (menuButton && sparkContainer) {
+    if (menuButton && sparkContainer && !isMobile) {
         menuButton.addEventListener('mouseenter', createSparkEffect);
     }
 
@@ -133,11 +209,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const fragment = document.createDocumentFragment();
         
-        for (let i = 0; i < 25; i++) {
+        // Reduce spark count on mobile for better performance
+        const sparkCount = isMobile ? 15 : 25;
+        
+        for (let i = 0; i < sparkCount; i++) {
             const spark = document.createElement('div');
             spark.className = 'spark';
             
-            const angle = (Math.PI * 2 * i) / 25;
+            const angle = (Math.PI * 2 * i) / sparkCount;
             const baseDistance = 50 + Math.random() * 80;
             const sparkX = Math.cos(angle) * baseDistance;
             const sparkY = Math.sin(angle) * baseDistance;
@@ -163,23 +242,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1300);
     }
 
-    // Menu window spark animations
+    // Menu window spark animations with mobile optimization
     const menuWindows = document.querySelectorAll('.menu-window');
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
     
     menuWindows.forEach(window => {
-        // Desktop hover effects
+        // Desktop hover effects (disabled on mobile)
         if (!isMobile) {
             window.addEventListener('mouseenter', function() {
                 createSparks(this);
             });
         }
         
-        // Mobile touch handling
+        // Mobile touch handling with performance optimizations
         if (isMobile) {
             let touchStartTime = 0;
             let isNavigating = false;
+            let touchTimeout = null;
             
+            // Use passive listeners for better performance
             window.addEventListener('touchstart', function(e) {
                 if (isNavigating) return;
                 
@@ -193,38 +273,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const targetUrl = parentLink.href;
                 
-                // Show visual feedback
+                // Show visual feedback immediately
                 this.style.background = '#f9f7f3';
                 this.style.boxShadow = '0 12px 40px rgba(166, 124, 82, 0.22)';
                 this.style.transform = 'scale(1.08)';
                 
-                // Create spark effects
-                createSparks(this);
+                // Create minimal spark effects for mobile
+                if (!isMobile) {
+                    createSparks(this);
+                }
                 
                 // Prevent multiple navigations
                 isNavigating = true;
                 
-                // Navigate after spark animation completes
-                setTimeout(() => {
+                // Clear any existing timeout
+                if (touchTimeout) {
+                    clearTimeout(touchTimeout);
+                }
+                
+                // Navigate after shorter delay on mobile
+                touchTimeout = setTimeout(() => {
                     try {
                         console.log('Navigating to:', targetUrl);
-                        // First try: window.location.href
-                        if (window && window.location) {
-                            window.location.href = targetUrl;
-                        }
-                        // Second try: window.location.assign
-                        else if (window && window.location && window.location.assign) {
-                            window.location.assign(targetUrl);
-                        }
-                        // Final fallback: Create and click a link
-                        else {
-                            const link = document.createElement('a');
-                            link.href = targetUrl;
-                            link.click();
-                        }
+                        // Use location.assign for better performance
+                        window.location.assign(targetUrl);
                     } catch (error) {
                         console.log('Navigation error:', error);
-                        // Final fallback - direct link click
+                        // Fallback navigation
                         try {
                             const link = document.createElement('a');
                             link.href = targetUrl;
@@ -233,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             console.log('Final navigation fallback failed:', finalError);
                         }
                     }
-                }, 1500);
+                }, isMobile ? 800 : 1500);
             }, { passive: false });
             
             // Fallback click handler for mobile
@@ -253,33 +328,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.style.boxShadow = '0 12px 40px rgba(166, 124, 82, 0.22)';
                 this.style.transform = 'scale(1.08)';
                 
-                // Create spark effects
-                createSparks(this);
-                
                 // Prevent multiple navigations
                 isNavigating = true;
                 
-                // Navigate after spark animation completes
+                // Navigate after delay
                 setTimeout(() => {
                     try {
-                        console.log('Navigating to:', targetUrl);
-                        // First try: window.location.href
-                        if (window && window.location) {
-                            window.location.href = targetUrl;
-                        }
-                        // Second try: window.location.assign
-                        else if (window && window.location && window.location.assign) {
-                            window.location.assign(targetUrl);
-                        }
-                        // Final fallback: Create and click a link
-                        else {
-                            const link = document.createElement('a');
-                            link.href = targetUrl;
-                            link.click();
-                        }
+                        window.location.assign(targetUrl);
                     } catch (error) {
                         console.log('Navigation error:', error);
-                        // Final fallback - direct link click
                         try {
                             const link = document.createElement('a');
                             link.href = targetUrl;
@@ -288,82 +345,46 @@ document.addEventListener('DOMContentLoaded', function() {
                             console.log('Final navigation fallback failed:', finalError);
                         }
                     }
-                }, 1500);
+                }, 800);
             });
         }
     });
 
     function createSparks(windowEl) {
+        // Skip spark creation on mobile for better performance
+        if (isMobile) return;
+        
         const sparkContainer = windowEl.querySelector('.spark-container');
         if (!sparkContainer) return;
+
+        const rect = windowEl.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
         
         sparkContainer.innerHTML = '';
-        const rect = windowEl.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
         
         const fragment = document.createDocumentFragment();
         
-        for (let i = 0; i < 35; i++) {
+        // Reduce spark count for better performance
+        const sparkCount = isMobile ? 12 : 15;
+        
+        for (let i = 0; i < sparkCount; i++) {
             const spark = document.createElement('div');
             spark.className = 'spark';
             
-            const border = Math.floor(Math.random() * 4);
-            let startX, startY, dirX, dirY;
+            const angle = (Math.PI * 2 * i) / sparkCount;
+            const baseDistance = 30 + Math.random() * 50;
+            const sparkX = Math.cos(angle) * baseDistance;
+            const sparkY = Math.sin(angle) * baseDistance;
             
-            if (border === 0) {
-                startX = Math.random() * width;
-                startY = 0;
-                dirX = 0;
-                dirY = -1;
-            } else if (border === 1) {
-                startX = width;
-                startY = Math.random() * height;
-                dirX = 1;
-                dirY = 0;
-            } else if (border === 2) {
-                startX = Math.random() * width;
-                startY = height;
-                dirX = 0;
-                dirY = 1;
-            } else {
-                startX = 0;
-                startY = Math.random() * height;
-                dirX = -1;
-                dirY = 0;
-            }
+            const randomOffsetX = (Math.random() - 0.5) * 15;
+            const randomOffsetY = (Math.random() - 0.5) * 15;
             
-            const baseSpread = 35 + Math.random() * 45;
-            const randomOffset = (Math.random() - 0.5) * 25;
-            const endX = startX + dirX * baseSpread + randomOffset;
-            const endY = startY + dirY * baseSpread + randomOffset;
-            
-            spark.style.left = startX + 'px';
-            spark.style.top = startY + 'px';
-            
-            const duration = 1400 + Math.random() * 300;
-            const delay = Math.random() * 0.12;
-            const easing = 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            
-            spark.animate([
-                { 
-                    transform: `translate(0, 0) scale(0.8)`, 
-                    opacity: 0 
-                },
-                { 
-                    transform: `translate(0, 0) scale(1)`, 
-                    opacity: 0.9 
-                },
-                { 
-                    transform: `translate(${endX - startX}px, ${endY - startY}px) scale(0.6)`, 
-                    opacity: 0 
-                }
-            ], {
-                duration: duration,
-                easing: easing,
-                fill: 'forwards',
-                delay: delay * 1000
-            });
+            spark.style.left = centerX + 'px';
+            spark.style.top = centerY + 'px';
+            spark.style.setProperty('--spark-x', (sparkX + randomOffsetX) + 'px');
+            spark.style.setProperty('--spark-y', (sparkY + randomOffsetY) + 'px');
+            spark.style.animationDelay = Math.random() * 0.1 + 's';
             
             fragment.appendChild(spark);
         }
@@ -374,6 +395,125 @@ document.addEventListener('DOMContentLoaded', function() {
             if (sparkContainer.parentNode) {
                 sparkContainer.innerHTML = '';
             }
-        }, 1700);
+        }, 1000);
+    }
+
+    // Contact modal functionality with mobile optimizations
+    const contactModals = document.querySelectorAll('.contact-modal');
+    const modalCloseButtons = document.querySelectorAll('.modal-close');
+    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+
+    // Handle contact modal close buttons with mobile optimization
+    modalCloseButtons.forEach(button => {
+        if (isMobile) {
+            button.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const modal = this.closest('.contact-modal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        } else {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const modal = this.closest('.contact-modal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    });
+
+    // Handle modal outside click with mobile optimization
+    contactModals.forEach(modal => {
+        if (isMobile) {
+            modal.addEventListener('touchstart', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+        } else {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+        }
+    });
+
+    // Handle add to cart buttons with mobile optimization
+    addToCartButtons.forEach(button => {
+        if (isMobile) {
+            button.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const carType = this.getAttribute('data-car-type');
+                const carName = this.getAttribute('data-car-name');
+                const carImage = this.getAttribute('data-car-image');
+                const category = this.getAttribute('data-category');
+                
+                if (carType && carName && carImage && category) {
+                    cart.addItem(carType, carName, carImage, category);
+                    
+                    // Show feedback on mobile
+                    this.style.background = '#4CAF50';
+                    this.textContent = 'Added!';
+                    setTimeout(() => {
+                        this.style.background = '';
+                        this.textContent = 'Add to Cart';
+                    }, 1000);
+                }
+            });
+        } else {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const carType = this.getAttribute('data-car-type');
+                const carName = this.getAttribute('data-car-name');
+                const carImage = this.getAttribute('data-car-image');
+                const category = this.getAttribute('data-category');
+                
+                if (carType && carName && carImage && category) {
+                    cart.addItem(carType, carName, carImage, category);
+                }
+            });
+        }
+    });
+
+    // Optimize scroll performance on mobile
+    if (isMobile) {
+        let ticking = false;
+        
+        function updateScroll() {
+            ticking = false;
+            // Any scroll-based animations can go here
+        }
+        
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateScroll);
+                ticking = true;
+            }
+        }
+        
+        window.addEventListener('scroll', requestTick, { passive: true });
+    }
+
+    // Preload critical images for better mobile performance
+    if (isMobile) {
+        const criticalImages = [
+            'images/classic.jpg',
+            'images/antique.jpg',
+            'images/rollsb.jpg'
+        ];
+        
+        criticalImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
     }
 }); 

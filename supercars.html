@@ -188,6 +188,11 @@
 
         /* Mobile Responsiveness */
         @media (max-width: 768px) {
+            .super-page {
+                background-attachment: scroll !important;
+                padding: 10px;
+            }
+            
             .page-title {
                 font-size: 2.5rem;
                 margin-bottom: 1.5rem;
@@ -196,6 +201,8 @@
             .page-content {
                 padding: 2rem 1.5rem;
                 margin: 0 10px;
+                backdrop-filter: blur(5px);
+                -webkit-backdrop-filter: blur(5px);
             }
 
             .car-windows {
@@ -206,6 +213,8 @@
                 width: 240px;
                 height: 150px;
                 transition: none !important;
+                -webkit-tap-highlight-color: transparent;
+                min-height: 44px;
             }
 
             .car-window:hover {
@@ -252,6 +261,8 @@
                 padding: 12px 25px;
                 font-size: 1rem;
                 transition: none !important;
+                -webkit-tap-highlight-color: transparent;
+                min-height: 44px;
             }
 
             .back-button:hover {
@@ -263,6 +274,31 @@
             .back-button:active {
                 transform: scale(0.98);
                 transition: transform 0.1s ease;
+            }
+            
+            /* Optimize modal for mobile */
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                max-width: none;
+                backdrop-filter: blur(5px);
+                -webkit-backdrop-filter: blur(5px);
+            }
+            
+            .modal-body {
+                padding: 1.5rem;
+            }
+            
+            .close-modal {
+                width: 44px;
+                height: 44px;
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            .add-to-cart-btn {
+                min-height: 44px;
+                -webkit-tap-highlight-color: transparent;
+                transition-duration: 0.2s !important;
             }
         }
 

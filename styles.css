@@ -5,6 +5,105 @@
     box-sizing: border-box;
 }
 
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+    /* Reduce animations on mobile for better performance - only for mobile */
+    .loading-screen *,
+    .menu-overlay *,
+    .menu-window,
+    .car-window,
+    .cart-item,
+    .contact-modal *,
+    .modal-content * {
+        animation-duration: 0.3s !important;
+        transition-duration: 0.2s !important;
+    }
+    
+    /* Optimize for mobile rendering */
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeSpeed;
+    }
+    
+    /* Reduce backdrop-filter usage on mobile for better performance */
+    .main-nav,
+    .page-content,
+    .cart-container,
+    .contact-modal {
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+    
+    /* Optimize background images for mobile */
+    .classic-page,
+    .super-page,
+    .antique-page,
+    .cart-page {
+        background-attachment: scroll !important;
+        background-size: cover !important;
+    }
+    
+    /* Reduce shadow complexity on mobile */
+    .car-window,
+    .menu-window,
+    .cart-button,
+    .menu-button {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+    }
+    
+    /* Optimize touch targets */
+    .nav-link,
+    .cart-button,
+    .menu-button,
+    .car-window,
+    .menu-window,
+    .quantity-btn,
+    .remove-btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    /* Reduce particle effects on mobile */
+    .luxury-particle {
+        display: none !important;
+    }
+    
+    /* Simplify loading animation on mobile */
+    .loading-spinner {
+        animation: none !important;
+    }
+    
+    .diamond-ring {
+        animation: none !important;
+    }
+    
+    .diamond {
+        animation: none !important;
+    }
+    
+    /* Optimize spark effects for mobile - only hide on mobile */
+    .spark {
+        display: none !important;
+    }
+    
+    /* Reduce complex gradients on mobile - only for mobile hover states */
+    .car-window:hover,
+    .menu-window:hover {
+        background: linear-gradient(135deg, #808080 0%, #a0a0a0 100%) !important;
+    }
+    
+    /* Optimize font rendering on mobile */
+    .store-title,
+    .page-title,
+    .cart-title,
+    .window-text,
+    .cart-item-name {
+        font-display: swap;
+        text-rendering: optimizeSpeed;
+    }
+}
+
 /* Loading Screen */
 .loading-screen {
     position: fixed;
@@ -938,12 +1037,15 @@ body, .intro-page {
     html, body {
         height: 100%;
         overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
     }
     
     .intro-page {
         min-height: 100vh;
         padding-top: 80px; /* Account for fixed navigation */
         padding-bottom: 20px;
+        will-change: auto;
     }
     
     .nav-container {
@@ -956,13 +1058,15 @@ body, .intro-page {
         left: 0;
         width: 100%;
         background: rgba(0, 0, 0, 0.95);
-        backdrop-filter: blur(20px);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
         flex-direction: column;
         padding: 2rem;
         transform: translateY(-100%);
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
+        will-change: transform, opacity;
     }
     
     .nav-menu.active {
@@ -973,6 +1077,9 @@ body, .intro-page {
     
     .nav-toggle {
         display: flex;
+        padding: 10px;
+        margin: -10px;
+        -webkit-tap-highlight-color: transparent;
     }
     
     .nav-toggle.active span:nth-child(1) {
@@ -995,6 +1102,7 @@ body, .intro-page {
     .cart-button {
         width: 45px;
         height: 45px;
+        -webkit-tap-highlight-color: transparent;
     }
     
     .cart-icon {
@@ -1016,6 +1124,7 @@ body, .intro-page {
         display: flex;
         align-items: center;
         justify-content: center;
+        will-change: auto;
     }
     
     .hero-content {
@@ -1027,6 +1136,7 @@ body, .intro-page {
     .about-section {
         padding: 1.5rem;
         margin-top: 2rem;
+        transform: none !important;
     }
     
     .contact-details {
@@ -1063,6 +1173,8 @@ body, .intro-page {
     .menu-button {
         padding: 1.2rem 2rem;
         font-size: 1rem;
+        -webkit-tap-highlight-color: transparent;
+        min-height: 44px;
     }
     
     .menu-button:hover {
