@@ -259,8 +259,12 @@ document.addEventListener('DOMContentLoaded', function() {
             let isNavigating = false;
             let touchTimeout = null;
             
+            // Target only the image for mobile clicks
+            const menuImage = window.querySelector('img');
+            if (!menuImage) return;
+            
             // Use passive listeners for better performance
-            window.addEventListener('touchstart', function(e) {
+            menuImage.addEventListener('touchstart', function(e) {
                 if (isNavigating) return;
                 
                 touchStartTime = Date.now();
@@ -273,15 +277,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const targetUrl = parentLink.href;
                 
-                // Show visual feedback immediately
-                this.style.background = '#f9f7f3';
-                this.style.boxShadow = '0 12px 40px rgba(166, 124, 82, 0.22)';
-                this.style.transform = 'scale(1.08)';
-                
-                // Create minimal spark effects for mobile
-                if (!isMobile) {
-                    createSparks(this);
-                }
+                // Show visual feedback immediately on the window
+                const windowEl = this.closest('.menu-window');
+                windowEl.style.background = '#f9f7f3';
+                windowEl.style.boxShadow = '0 12px 40px rgba(166, 124, 82, 0.22)';
+                windowEl.style.transform = 'scale(1.08)';
                 
                 // Prevent multiple navigations
                 isNavigating = true;
@@ -308,11 +308,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             console.log('Final navigation fallback failed:', finalError);
                         }
                     }
-                }, isMobile ? 800 : 1500);
+                }, 800);
             }, { passive: false });
             
             // Fallback click handler for mobile
-            window.addEventListener('click', function(e) {
+            menuImage.addEventListener('click', function(e) {
                 if (isNavigating) return;
                 
                 e.preventDefault();
@@ -323,10 +323,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 const targetUrl = parentLink.href;
                 
-                // Show visual feedback
-                this.style.background = '#f9f7f3';
-                this.style.boxShadow = '0 12px 40px rgba(166, 124, 82, 0.22)';
-                this.style.transform = 'scale(1.08)';
+                // Show visual feedback on the window
+                const windowEl = this.closest('.menu-window');
+                windowEl.style.background = '#f9f7f3';
+                windowEl.style.boxShadow = '0 12px 40px rgba(166, 124, 82, 0.22)';
+                windowEl.style.transform = 'scale(1.08)';
                 
                 // Prevent multiple navigations
                 isNavigating = true;

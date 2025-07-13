@@ -56,12 +56,20 @@
     .nav-link,
     .cart-button,
     .menu-button,
-    .car-window,
-    .menu-window,
     .quantity-btn,
     .remove-btn {
         min-height: 44px;
         min-width: 44px;
+    }
+    
+    /* Make only the image area clickable on mobile for menu windows */
+    .menu-window {
+        pointer-events: none;
+    }
+    
+    .menu-window img {
+        pointer-events: auto;
+        cursor: pointer;
     }
     
     /* Reduce particle effects on mobile */
@@ -1039,6 +1047,13 @@ body, .intro-page {
         overflow-x: hidden;
         -webkit-overflow-scrolling: touch;
         scroll-behavior: smooth;
+    }
+    
+    /* Improve mobile scroll smoothness */
+    .menu-overlay {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        overflow-y: auto;
     }
     
     .intro-page {
